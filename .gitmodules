@@ -1,3 +1,4 @@
-[submodule "CANBoard_Chibi/ChibiOS"]
-	path = /ChibiOS
+
+[submodule "ChibiOS"]
+	path = ChibiOS
 	url = https://github.com/ChibiOS/ChibiOS.git

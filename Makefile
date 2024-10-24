@@ -3,6 +3,12 @@
 # NOTE: Can be overridden externally.
 #
 
+ifeq ($(BOARD),)
+  BOARD = canboard_v2
+endif
+
+BOARDDIR = boards/$(BOARD)
+
 # Compiler options here.
 ifeq ($(USE_OPT),)
   USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16
@@ -101,7 +107,6 @@ include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f3xx.m
 # HAL-OSAL files (optional).
 include $(CHIBIOS)/os/hal/hal.mk
 include $(CHIBIOS)/os/hal/ports/STM32/STM32F3xx/platform.mk
-include $(CHIBIOS)/os/hal/boards/ST_NUCLEO32_F303K8/board.mk
 include $(CHIBIOS)/os/hal/osal/rt-nil/osal.mk
 # RTOS files (optional).
 include $(CHIBIOS)/os/rt/rt.mk
@@ -112,6 +117,9 @@ include $(CHIBIOS)/tools/mk/autobuild.mk
 include $(CHIBIOS)/os/test/test.mk
 include $(CHIBIOS)/test/rt/rt_test.mk
 include $(CHIBIOS)/test/oslib/oslib_test.mk
+
+# include board.mk that sets per-board options
+include $(BOARDDIR)/board.mk
 
 # Define linker script file here
 LDSCRIPT= $(STARTUPLD)/STM32F303x8.ld

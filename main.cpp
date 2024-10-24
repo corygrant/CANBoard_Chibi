@@ -29,9 +29,9 @@ static THD_FUNCTION(Thread1, arg) {
   chRegSetThreadName("blinker");
 
   while (true) { 
-    palClearLine(LINE_LED_GREEN);
+    palClearLine(LINE_DO1);
     chThdSleepMilliseconds(100);
-    palSetLine(LINE_LED_GREEN);
+    palSetLine(LINE_DO1);
     chThdSleepMilliseconds(100);
   }
 }
@@ -52,11 +52,6 @@ int main(void) {
   chSysInit();
 
   /*
-   * Activates the serial driver 2 using the driver default configuration.
-   */
-  sdStart(&SD2, NULL);
-
-  /*
    * Creates the blinker thread.
    */
   chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
@@ -66,9 +61,8 @@ int main(void) {
    * sleeping in a loop and check the button state.
    */
   while (true) {
-    if (!palReadLine(LINE_ARD_D3)) {
-      test_execute((BaseSequentialStream *)&SD2, &rt_test_suite);
-      test_execute((BaseSequentialStream *)&SD2, &oslib_test_suite);
+    if (!palReadLine(LINE_DI1)) {
+      palClearLine(LINE_DO1);
     }
     chThdSleepMilliseconds(500);
   }

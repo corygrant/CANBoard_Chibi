@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/ChibiTesting.elf",
+            "name": "Debug with OpenOCD",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "configFiles": ["interface/stlink.cfg", 
+						"target/stm32f3x.cfg"],
+            "showDevDebugOutput": "raw",
+            "svdFile": "${workspaceFolder}STM32F303.svd",
+            "rtos": "auto",
+            "v1": false,
+            "runToEntryPoint": "main",
+
+        }
+    ]
+}

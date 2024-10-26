@@ -41,7 +41,6 @@
                 "${workspaceFolder}/ChibiOS/test/oslib/source/test",
                 "${workspaceFolder}/ChibiOS/test/rt/source/test",
                 "${workspaceFolder}/cfg",
-                "${workspaceFolder}/boards",
                 "${workspaceFolder}/boards/canboard_v2"
             ]
         }

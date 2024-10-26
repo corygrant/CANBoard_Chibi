@@ -19,6 +19,8 @@
 #include "rt_test_root.h"
 #include "oslib_test_root.h"
 
+#include "can.h"
+
 /*
  * Green LED blinker thread, times are in milliseconds.
  */
@@ -56,14 +58,12 @@ int main(void) {
    */
   chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
 
+  InitCan();
+  
   /*
-   * Normal main() thread activity, in this demo it does nothing except
-   * sleeping in a loop and check the button state.
+   * Normal main() thread activity
    */
   while (true) {
-    if (!palReadLine(LINE_DI1)) {
-      palClearLine(LINE_DO1);
-    }
     chThdSleepMilliseconds(500);
   }
 }

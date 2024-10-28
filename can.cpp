@@ -1,6 +1,7 @@
 #include "can.h"
 #include "hal.h"
 #include "port.h"
+#include "analog.h"
 #include "canboard_config.h"
 
 static const CANFilter filters[1] = {
@@ -23,17 +24,36 @@ void CanTxThread(void*)
 
     while(1)
     {
+        //uint16_t temperature = (uint16_t)((80.0 / ((float)(*STM32_TEMP_3V3_110C) - (float)(*STM32_TEMP_3V3_30C)) *
+        //                        (((float)ReadAdc(AnalogTempSensor) - (float)(*STM32_TEMP_3V3_30C)) + 30.0) * 10.0));
+
         canTxMsg.IDE = CAN_IDE_STD;
         canTxMsg.SID = CAN_BASE_ID;
         canTxMsg.DLC = 8;
-        canTxMsg.data8[0] = 0x01;
-        canTxMsg.data8[1] = 0x02;
-        canTxMsg.data8[2] = 0x03;
-        canTxMsg.data8[3] = 0x04;
-        canTxMsg.data8[4] = 0x05;
-        canTxMsg.data8[5] = 0x06;
-        canTxMsg.data8[6] = 0x07;
-        canTxMsg.data8[7] = 0x08;
+        canTxMsg.data8[0] = ReadAdc(AnalogInput1) & 0xFF;
+        canTxMsg.data8[1] = ReadAdc(AnalogInput1) >> 8;
+        canTxMsg.data8[2] = ReadAdc(AnalogInput2) & 0xFF;
+        canTxMsg.data8[3] = ReadAdc(AnalogInput2) >> 8;
+        canTxMsg.data8[4] = ReadAdc(AnalogInput3) & 0xFF;
+        canTxMsg.data8[5] = ReadAdc(AnalogInput3) >> 8;
+        canTxMsg.data8[6] = ReadAdc(AnalogInput4) & 0xFF;
+        canTxMsg.data8[7] = ReadAdc(AnalogInput4) >> 8;
+
+        canTransmitTimeout(&CAND1, CAN_ANY_MAILBOX, &canTxMsg, TIME_INFINITE);
+
+        chThdSleepMilliseconds(20);
+
+        canTxMsg.IDE = CAN_IDE_STD;
+        canTxMsg.SID = CAN_BASE_ID + 1;
+        canTxMsg.DLC = 8;
+        canTxMsg.data8[0] = ReadAdc(AnalogInput5) & 0xFF;
+        canTxMsg.data8[1] = ReadAdc(AnalogInput5) >> 8;
+        canTxMsg.data8[2] = ReadAdc(AnalogTempSensor) & 0xFF;
+        canTxMsg.data8[3] = ReadAdc(AnalogTempSensor) >> 8;
+        canTxMsg.data8[4] = 0;
+        canTxMsg.data8[5] = 0;
+        canTxMsg.data8[6] = 0;
+        canTxMsg.data8[7] = 0;
 
         canTransmitTimeout(&CAND1, CAN_ANY_MAILBOX, &canTxMsg, TIME_INFINITE);
 
@@ -59,7 +79,7 @@ static THD_FUNCTION(CanRxThread, p)
         if (canRxMsg.DLC > 0)
         {
             canTxMsg.IDE = CAN_IDE_STD;
-            canTxMsg.SID = CAN_BASE_ID + 1;
+            canTxMsg.SID = CAN_BASE_ID + 10;
             canTxMsg.DLC = 2;
             canTxMsg.data8[0] = 0x10;
             canTxMsg.data8[1] = 0x20;

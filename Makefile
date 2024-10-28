@@ -134,6 +134,7 @@ CSRC = $(ALLCSRC) \
 CPPSRC = $(ALLCPPSRC) \
          $(BOARDDIR)/port.cpp \
          can.cpp \
+         analog.cpp \
          main.cpp
          
 

@@ -5,6 +5,7 @@
 
 #include "canboard_config.h"
 #include "can.h"
+#include "analog.h"
 
 /*
  * Application entry point.
@@ -16,7 +17,7 @@ int main(void) {
 
   InitCan();
   //Init digital inputs
-  //Init analog inputs
+  InitAdc();
   //Init digital outputs
   
   while (true) {

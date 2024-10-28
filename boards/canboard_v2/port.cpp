@@ -1,4 +1,6 @@
 #include "port.h"
+#include "canboard_config.h"
+
 
 
 static const CANConfig canConfig500 =

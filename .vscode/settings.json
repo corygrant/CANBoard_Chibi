@@ -11,6 +11,7 @@
 		"**/ChibiOS/demos": true,
 	},
 	"files.associations": {
-		"*.inc": "cpp"
+		"*.inc": "cpp",
+		"hal.h": "c"
 	},
 }

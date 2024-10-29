@@ -6,34 +6,32 @@
 adcsample_t adc1_samples[ADC1_NUM_CHANNELS] = {0};
 adcsample_t adc2_samples[ADC2_NUM_CHANNELS] = {0};
 
-static const ADCConfig adc1_config = {};
-static const ADCConfig adc2_config = {};
+msg_t adc1Res;
+msg_t adc2Res;
 
 static const ADCConversionGroup adc1_cfg = {
-  .circular = true,
-  .num_channels = ADC1_NUM_CHANNELS,
-  .end_cb = NULL,
-  .error_cb = NULL,
-  .cfgr =   ADC_CFGR_CONT | ADC_CFGR_OVRMOD | 
-            ADC_CFGR_RES_12BITS | ADC_CFGR_DMACFG_CIRCULAR |
-            ADC_CFGR_DMAEN,                             //CFGR: Configuration register
-  .tr1 = ADC_TR_DISABLED,                               //TR1: Watchdog threshold 1 register
-  .tr2 = ADC_TR_DISABLED,                               //TR2: Watchdog threshold 2 register
-  .tr3 = ADC_TR_DISABLED,                               //TR3: Watchdog threshold 3 register
-  .awd2cr = 0,                                          //AWD2CR: Analog watchdog 2 configuration register
-  .awd3cr = 0,                                          //AWD3CR: Analog watchdog 3 configuration register
-  .smpr = { ADC_SMPR1_SMP_AN1(ADC_SMPR_SMP_601P5) |
+    .circular = true,
+    .num_channels = ADC1_NUM_CHANNELS,
+    .end_cb = NULL,
+    .error_cb = NULL,
+    .cfgr =   ADC_CFGR_CONT | ADC_CFGR_OVRMOD | ADC_CFGR_RES_12BITS,                        //CFGR: Configuration register
+    .tr1 = ADC_TR_DISABLED,                               //TR1: Watchdog threshold 1 register
+    .tr2 = ADC_TR_DISABLED,                               //TR2: Watchdog threshold 2 register
+    .tr3 = ADC_TR_DISABLED,                               //TR3: Watchdog threshold 3 register
+    .awd2cr = 0,                                          //AWD2CR: Analog watchdog 2 configuration register
+    .awd3cr = 0,                                          //AWD3CR: Analog watchdog 3 configuration register
+    .smpr = { ADC_SMPR1_SMP_AN1(ADC_SMPR_SMP_601P5) |
             ADC_SMPR1_SMP_AN2(ADC_SMPR_SMP_601P5) |
             ADC_SMPR1_SMP_AN3(ADC_SMPR_SMP_601P5) |
             ADC_SMPR1_SMP_AN4(ADC_SMPR_SMP_601P5), 
             ADC_SMPR2_SMP_AN16(ADC_SMPR_SMP_601P5) },   //SMPR: Sampling time register
-  .sqr = {  ADC_SQR1_SQ1_N(ADC_CHANNEL_IN1) | 
+    .sqr = {  ADC_SQR1_SQ1_N(ADC_CHANNEL_IN1) |         //SQR: Regular sequence register
             ADC_SQR1_SQ2_N(ADC_CHANNEL_IN2) | 
             ADC_SQR1_SQ3_N(ADC_CHANNEL_IN3) | 
             ADC_SQR1_SQ4_N(ADC_CHANNEL_IN4), 
             ADC_SQR2_SQ5_N(ADC_CHANNEL_IN16), 
             0, 
-            0 }                                         //SQR: Regular sequence register
+            0 }
 };
 
 static const ADCConversionGroup adc2_cfg = {
@@ -41,9 +39,7 @@ static const ADCConversionGroup adc2_cfg = {
   .num_channels = ADC2_NUM_CHANNELS,
   .end_cb = NULL,
   .error_cb = NULL,
-  .cfgr =   ADC_CFGR_CONT | ADC_CFGR_OVRMOD | 
-            ADC_CFGR_RES_12BITS | ADC_CFGR_DMACFG_CIRCULAR |
-            ADC_CFGR_DMAEN,                              //CFGR: Configuration register
+  .cfgr =   ADC_CFGR_CONT | ADC_CFGR_OVRMOD | ADC_CFGR_RES_12BITS,                              //CFGR: Configuration register
   .tr1 = ADC_TR_DISABLED,                               //TR1: Watchdog threshold 1 register
   .tr2 = ADC_TR_DISABLED,                               //TR2: Watchdog threshold 2 register
   .tr3 = ADC_TR_DISABLED,                               //TR3: Watchdog threshold 3 register
@@ -65,18 +61,18 @@ static THD_FUNCTION(AdcThread, p)
 
     while (true)
     {   
-        adcConvert(&ADCD1, &adc1_cfg, adc1_samples, ADC1_BUF_DEPTH);
-        adcConvert(&ADCD2, &adc2_cfg, adc2_samples, ADC2_BUF_DEPTH);
+        adc1Res = adcConvert(&ADCD1, &adc1_cfg, adc1_samples, ADC1_BUF_DEPTH);
+        adc2Res = adcConvert(&ADCD2, &adc2_cfg, adc2_samples, ADC2_BUF_DEPTH);
         chThdSleepMilliseconds(250);
     }
 }
 
 void InitAdc()
 {
-    adcStart(&ADCD1, &adc1_config);
+    adcStart(&ADCD1, NULL);
     adcSTM32EnableTS(&ADCD1); // Enable temperature sensor
 
-    adcStart(&ADCD2, &adc2_config);
+    adcStart(&ADCD2, NULL);
 
     chThdCreateStatic(waAdcThread, sizeof(waAdcThread), NORMALPRIO + 2, AdcThread, NULL);
 }

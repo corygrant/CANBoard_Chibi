@@ -20,4 +20,5 @@ enum AnalogChannel
 };
 
 void InitAdc();
-adcsample_t ReadAdc(AnalogChannel channel);
+adcsample_t GetAdcRaw(AnalogChannel channel);
+uint16_t GetTemperature();

@@ -23,8 +23,6 @@ int main(void) {
   while (true) {
     //Read digital inputs
 
-    //Read analog inputs
-
     //Set digital outputs
     
     chThdSleepMilliseconds(500);

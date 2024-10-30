@@ -131,6 +131,9 @@ CPPSRC = $(ALLCPPSRC) \
          $(BOARDDIR)/port.cpp \
          can.cpp \
          analog.cpp \
+         digital.cpp \
+         rotary_switch.cpp \
+         analog_switch.cpp \
          main.cpp
          
 

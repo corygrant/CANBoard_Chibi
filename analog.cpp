@@ -67,17 +67,17 @@ adcsample_t GetAdcRaw(AnalogChannel channel)
 {
     switch (channel)
     {
-    case AnalogInput1:
+    case AnIn1:
         return adc1_samples[0];
-    case AnalogInput2:
+    case AnIn2:
         return adc1_samples[1];
-    case AnalogInput3:
+    case AnIn3:
         return adc1_samples[2];
-    case AnalogInput4:
+    case AnIn4:
         return adc1_samples[3];
-    case AnalogInput5:
+    case AnIn5:
         return adc2_samples[0];
-    case AnalogTempSensor:
+    case TempSensor:
         return adc1_samples[4];
     default:
         return 0; // Invalid channel
@@ -86,5 +86,5 @@ adcsample_t GetAdcRaw(AnalogChannel channel)
 
 uint16_t GetTemperature()
 {
-    return (uint16_t)(30.0 + ((float)(GetAdcRaw(AnalogTempSensor) - STM32_TEMP_3V3_30C) / (STM32_TEMP_3V3_110C - STM32_TEMP_3V3_30C)) * (110.0 - 30.0));
+    return (uint16_t)(30.0 + ((float)(GetAdcRaw(TempSensor) - STM32_TEMP_3V3_30C) / (STM32_TEMP_3V3_110C - STM32_TEMP_3V3_30C)) * (110.0 - 30.0));
 }

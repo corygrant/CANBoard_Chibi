@@ -11,12 +11,12 @@
 
 enum AnalogChannel
 {
-    AnalogInput1 = 0,
-    AnalogInput2,
-    AnalogInput3,
-    AnalogInput4,
-    AnalogInput5,
-    AnalogTempSensor
+    AnIn1 = 0,
+    AnIn2,
+    AnIn3,
+    AnIn4,
+    AnIn5,
+    TempSensor
 };
 
 void InitAdc();

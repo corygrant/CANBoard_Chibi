@@ -6,6 +6,7 @@
 #include "canboard_config.h"
 #include "can.h"
 #include "analog.h"
+#include "rotary_switch.h"
 
 /*
  * Application entry point.
@@ -16,15 +17,13 @@ int main(void) {
   chSysInit();
 
   InitCan();
-  //Init digital inputs
   InitAdc();
-  //Init digital outputs
   
   while (true) {
-    //Read digital inputs
-
-    //Set digital outputs
     
+    //Set digital outputs
+
+    UpdateSwPos();    
     chThdSleepMilliseconds(500);
   }
 }
